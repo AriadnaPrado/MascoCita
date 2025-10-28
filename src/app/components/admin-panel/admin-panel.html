@@ -1,0 +1,28 @@
+<div class="container">
+  <h2>Panel de Administración</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Servicio</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of turnos">
+        <td>{{ t.cliente }}</td>
+        <td>{{ t.fecha }}</td>
+        <td>{{ t.hora }}</td>
+        <td>{{ t.servicio }}</td>
+        <td><span [class]="t.estado.toLowerCase()">{{ t.estado }}</span></td>
+        <td>
+          <button (click)="cambiarEstado(t, 'Confirmado')">Confirmar</button>
+          <button class="cancelar" (click)="cambiarEstado(t, 'Cancelado')">Cancelar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

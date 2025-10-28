@@ -1,0 +1,84 @@
+/* ===== Container general ===== */
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  font-family: "Inter", sans-serif;
+  text-align: center;
+}
+
+/* ===== Título ===== */
+h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #222;
+  text-align: left;
+}
+
+/* ===== Formulario de reserva ===== */
+.form-turno {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 180px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== Tabla de turnos ===== */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;  /* efecto filas flotantes */
+}
+
+th {
+  text-align: left;
+  padding: 14px;
+  background: #f3f6fa;
+  font-size: 15px;
+  font-weight: 600;
+  color: #555;
+}
+
+td {
+  padding: 14px;
+  background: #ffffff;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+  color: #333;
+  border-radius: 6px;
+}
+
+/* ===== Estados ===== */
+.confirmado { color: #28a745; font-weight: 600; }
+.pendiente  { color: #f0ad4e; font-weight: 600; }
+.cancelado  { color: #dc3545; font-weight: 600; }

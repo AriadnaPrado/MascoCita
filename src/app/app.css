@@ -1,0 +1,129 @@
+/* --- Navbar base --- */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e97415;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  font-family: "Inter", sans-serif
+}
+
+.nav-logo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  color: #e97415;
+}
+
+/* --- Toggle (hamburguesa) --- */
+.nav-toggle {
+  display: none;
+}
+
+.nav-toggle-label {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.nav-toggle-label span,
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+  content: '';
+  background: white;
+  height: 2px;
+  width: 25px;
+  border-radius: 2px;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+  position: absolute;
+  left: 0;
+}
+
+.nav-toggle-label span::before {
+  top: -8px;
+}
+
+.nav-toggle-label span::after {
+  top: 8px;
+}
+
+/* --- Responsividad --- */
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav-toggle-label {
+    display: flex;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: #e97415;
+    flex-direction: column;
+    width: 200px;
+    text-align: center;
+    padding: 1rem 0;
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #nav-toggle:checked ~ .nav-links {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+
+.home {
+  text-align: center;
+  padding: 100px 20px;
+  background: linear-gradient(135deg, #1976d2, #00bcd4);
+  color: white;
+  min-height: 80vh;
+  font-family: "Inter", sans-serif
+}
+.btn {
+  background: white;
+  color: #1976d2;
+  padding: 10px 25px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.btn:hover {
+  background: #e3f2fd;
+}

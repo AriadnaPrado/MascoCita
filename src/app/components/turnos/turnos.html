@@ -1,0 +1,29 @@
+<div class="container">
+  <h2>Mis Turnos</h2>
+
+  <form (ngSubmit)="reservar()" class="form-turno">
+    <input type="date" [(ngModel)]="nuevoTurno.fecha" name="fecha" required />
+    <input type="time" [(ngModel)]="nuevoTurno.hora" name="hora" required />
+    <input type="text" [(ngModel)]="nuevoTurno.servicio" name="servicio" placeholder="Servicio" required />
+    <button type="submit">Reservar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Servicio</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of turnos">
+        <td>{{ t.fecha }}</td>
+        <td>{{ t.hora }}</td>
+        <td>{{ t.servicio }}</td>
+        <td><span [class]="t.estado.toLowerCase()">{{ t.estado }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
