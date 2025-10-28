@@ -6,7 +6,7 @@ import {Registro} from './components/registro/registro';
 import {Inicio} from './components/inicio/inicio';
 
 export const routes: Routes = [
-  
+  { path: '', redirectTo: '/inicio', pathMatch: 'full' },
   { path: 'turnos', component: Turnos },
   {path: 'admin-panel', component: AdminPanel},
   { path: 'login', component: Login },
