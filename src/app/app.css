@@ -12,6 +12,7 @@ header h1 {
   font-size: 1.8 rem; /* ← más pequeño */
   font-weight: bold;
   margin: 0;
+  font-family: "Pacifico", cursive;
 }
 
 nav {
