@@ -22,11 +22,13 @@ div {
 }
 
 p {
+  font-family: "Bricolage Grotesque", sans-serif;
   font-size: 1.0rem;
   margin-bottom: 30px;
 }
 
 button {
+   font-family: "Bricolage Grotesque", sans-serif;
   background-color: #ff7b00;
   color: white;
   border: none;
