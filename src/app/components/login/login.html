@@ -1,1 +1,29 @@
-<p>login</p>
+<form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
+  <div>
+    <label>Email</label><br>
+    <input
+      type="email"
+      name="email"
+      [(ngModel)]="email"
+      required
+      placeholder="Ingresá tu email">
+  </div>
+
+  <div>
+    <label>Password</label><br>
+    <input
+      type="password"
+      name="password"
+      [(ngModel)]="password"
+      required
+      minlength="4"
+      placeholder="Ingresá tu contraseña">
+  </div>
+
+  <button type="submit" [disabled]="loginForm.invalid">Ingresar</button>
+</form>
+
+<!-- Mostrar errores si querés -->
+<div *ngIf="loginForm.submitted && loginForm.invalid" style="color: red; margin-top: 10px;">
+  Por favor completá todos los campos correctamente.
+</div>
