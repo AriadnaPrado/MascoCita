@@ -21,14 +21,13 @@ h2 {
   margin-bottom: 18px;
   display: flex;
   flex-direction: column;
-  background-color: rgba(240, 248, 255, 0.8); 
 }
 
 label {
   font-weight: 600;
   color: #00bfff;
   margin-bottom: 6px;
-  font-weight: bold;
+  
 }
 
 input {
