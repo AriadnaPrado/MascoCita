@@ -1,6 +1,6 @@
 /* Contenedor centrado */
 .form-wrapper {
-  height: 70vh;
+  height: 68vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,6 +10,7 @@
 form {
   width: 250px;
   padding: 30px;
+  padding-top: 1px;
   border-radius: 10px;
  background-color: rgba(240, 248, 255, 0.8); 
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -30,7 +31,7 @@ form {
 h2 {
  color: #ff8c00;
  font-family: 'Pacifico';
- font-size: 1.8rem
+ font-size: 35px
 }
 label {
   align-self: flex-start; /* alinea etiqueta al inicio del input */
@@ -47,7 +48,7 @@ input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 14px;
   
 }
@@ -66,7 +67,7 @@ button {
 }
 
 button:hover {
-  background-color: #357ab8;
+  background-color: #007bff;
 }
 
 button:disabled {

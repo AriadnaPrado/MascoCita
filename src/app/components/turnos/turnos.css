@@ -17,6 +17,8 @@ h2 {
   text-align: center;
   margin-bottom: 30px;
   text-shadow: 0 2px 6px rgba(255, 165, 0, 0.3);
+  font-family: "Bricolage Grotesque", sans-serif;
+
 }
 
 /* ===== Formulario de reserva ===== */
@@ -50,6 +52,8 @@ input:focus {
 
 /* ===== Botón ===== */
 button {
+   display: block;
+  margin: 0 auto 25px; 
   background-color: #ffa500;
   color: #fff;
   border: none;
@@ -59,12 +63,14 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.25s ease;
+  
 }
 
 button:hover {
   background-color: #ff7b00;
   box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
   transform: translateY(-2px);
+  justify-content: center;
 }
 
 /* ===== Tabla de turnos ===== */
