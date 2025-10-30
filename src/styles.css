@@ -16,6 +16,6 @@ body::before {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  filter: blur(3px); /* 👈 Ajustá el nivel de desenfoque */
+  filter: blur(3px); /* Ajustá el nivel de desenfoque */
   z-index: -1; /* lo manda detrás del contenido */
 }
