@@ -1,6 +1,6 @@
 header {
   text-align: center;
-  padding: 60px 20px;
+  padding: 40px 20px;
  
   color: #333;
 }
@@ -14,8 +14,8 @@ h1 {
 
 div {
   background-color: rgba(240, 248, 255, 0.8); 
-    max-width: 600px;         /* Ancho máximo de la caja */
-  margin: 40px auto;        /* Centrar horizontalmente */
+    max-width: 450px;         /* Ancho máximo de la caja */
+  margin: 30px auto;        /* Centrar horizontalmente */
   padding: 10px;            /* Espaciado interno */
   border-radius: 12px;      /* Bordes redondeados */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
@@ -44,3 +44,6 @@ button:hover {
 }
 
 
+.naranja {
+  background-color: #ff4800;
+}

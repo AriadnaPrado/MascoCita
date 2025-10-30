@@ -1,0 +1,74 @@
+.form-wrapper {
+  max-width: 300px;
+  margin: 40px auto;
+  padding: 30px;
+  padding-top: 10px;
+  background-color: rgba(240, 248, 255, 0.8); 
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 191, 255, 0.15);
+  font-family: "Bricolage Grotesque", sans-serif;
+}
+
+h2 {
+  text-align: center;
+  color: #ff8c00;
+  margin-bottom: 25px;
+  font-size: 35px;
+  font-family: "Pacifico";
+}
+
+.form-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(240, 248, 255, 0.8); 
+}
+
+label {
+  font-weight: 600;
+  color: #00bfff;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  
+}
+
+input:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 6px rgba(0, 191, 255, 0.3);
+  outline: none;
+}
+
+button {
+  display: block;
+  margin: 10px auto 0;
+  background-color: #ffa500;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+button:hover {
+  background-color: #ff7b00;
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}

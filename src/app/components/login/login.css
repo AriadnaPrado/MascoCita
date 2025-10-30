@@ -37,7 +37,7 @@ label {
   align-self: flex-start; /* alinea etiqueta al inicio del input */
   font-weight: bold;
   margin-bottom: 5px;
-  color: #007bff;
+  color:#00bfff;
   font-family: "Bricolage Grotesque", sans-serif;
 
  
@@ -57,7 +57,7 @@ input {
 button {
   width: 100%;
   padding: 10px;
-  background-color:#007bff;
+  background-color:#ff8c00;
   color: white;
   font-size: 16px;
   border: none;
@@ -67,11 +67,11 @@ button {
 }
 
 button:hover {
-  background-color: #007bff;
+  background-color: #ff8c00;
 }
 
 button:disabled {
-  background-color: #a0c4f0;
+  background-color: #f0c7a0;
   cursor: not-allowed;
 }
 
