@@ -32,7 +32,7 @@ export class Registro {
         password: this.password
       });
 
-      alert('Registro exitoso 🎉');
+      alert('Registro exitoso');
       form.reset();
     }
   }

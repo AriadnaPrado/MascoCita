@@ -18,8 +18,8 @@ interface Turno {
 })
 export class Turnos {
   turnos: Turno[] = [
-    { fecha: '2025-10-28', hora: '09:00', servicio: 'Corte de cabello', estado: 'Confirmado' },
-    { fecha: '2025-10-29', hora: '11:30', servicio: 'Afeitado', estado: 'Pendiente' },
+    { fecha: '2025-10-28', hora: '09:00', servicio: 'Peluqueria', estado: 'Confirmado' },
+    { fecha: '2025-10-31', hora: '11:30', servicio: 'Consulta con Veterinario', estado: 'Pendiente' },
   ];
 
   nuevoTurno: Turno = { fecha: '', hora: '', servicio: '', estado: 'Pendiente' };
