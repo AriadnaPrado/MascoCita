@@ -1,29 +1,32 @@
-<form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
-  <div>
-    <label>Email</label><br>
-    <input
-      type="email"
-      name="email"
-      [(ngModel)]="email"
-      required
-      placeholder="Ingresá tu email">
-  </div>
+<div class="form-wrapper">
+  <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
+    <h2>Iniciar sesión</h2>
 
-  <div>
-    <label>Password</label><br>
-    <input
-      type="password"
-      name="password"
-      [(ngModel)]="password"
-      required
-      minlength="4"
-      placeholder="Ingresá tu contraseña">
-  </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        required
+        placeholder="Ingresá tu email">
+    </div>
 
-  <button type="submit" [disabled]="loginForm.invalid">Ingresar</button>
-</form>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        required
+        minlength="4"
+        placeholder="Ingresá tu contraseña">
+    </div>
 
-<!-- Mostrar errores si querés -->
-<div *ngIf="loginForm.submitted && loginForm.invalid" style="color: red; margin-top: 10px;">
-  Por favor completá todos los campos correctamente.
+    <button type="submit" [disabled]="loginForm.invalid">Ingresar</button>
+
+    <div *ngIf="loginForm.submitted && loginForm.invalid" class="error-message">
+      Por favor completá todos los campos correctamente.
+    </div>
+  </form>
 </div>
