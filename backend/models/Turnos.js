@@ -1,6 +1,15 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
+/**
+ * Modelo Turno
+ * 
+ * Estados permitidos:
+ * - "Disponible" → El turno está libre y se muestra al cliente.
+ * - "Reservado"  → Un cliente reservó el turno.
+ * - "Confirmado" → Admin confirmó el turno.
+ * - "Cancelado"  → Admin lo canceló (puede quedar libre de nuevo si así se decide).
+ */
 const Turno = sequelize.define("Turno", {
   id: {
     type: DataTypes.INTEGER,
@@ -24,11 +33,15 @@ const Turno = sequelize.define("Turno", {
   },
 
   estado: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM("Disponible", "Reservado", "Confirmado", "Cancelado"),
     defaultValue: "Disponible",
   },
 
-  // ID del cliente (Cognito "sub"), null cuando nadie lo tomó
+  /**
+   * ID del cliente que reservó el turno.
+   * Es el "sub" de Cognito (STRING).
+   * Si es null → el turno está disponible.
+   */
   idCliente: {
     type: DataTypes.STRING,
     allowNull: true,
