@@ -5,11 +5,11 @@
     <a routerLink="/registro" routerLinkActive="active">Registrate</a>
     <a routerLink="/turnos" routerLinkActive="active">Turnos</a>
     <a routerLink="/admin-panel" routerLinkActive="active">Admin</a>
+
+    <a style="cursor: pointer;" (click)="cerrarSesion()">Cerrar Sesión</a>
   </nav>
 </header>
 
-  <router-outlet></router-outlet>
+<router-outlet></router-outlet>
 
-<footer>
-  <p>© 2025 MascoCita</p>
-</footer>
+<app-footer></app-footer>
