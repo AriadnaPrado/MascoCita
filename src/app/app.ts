@@ -1,24 +1,41 @@
 import { Component } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet} from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { RouterOutlet, RouterModule, Router } from '@angular/router';
+import { Footer } from './components/footer/footer';
 
+/** Importamos la función para cerrar sesión de Amplify */
+import { signOut } from 'aws-amplify/auth';
+
+/**
+ * @component App
+ * @description Componente raíz de la aplicación.
+ * Gestiona la estructura principal (Header, RouterOutlet, Footer).
+ * @selector app-root
+ * @standalone true
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule],
+  imports: [CommonModule, RouterOutlet, RouterModule, Footer],
   templateUrl: './app.html',
-  styleUrls: [ './app.css']
-
+  styleUrls: ['./app.css']
 })
 export class App {
-  currentUrl = '';
-  
-  
+
+  constructor(private router: Router) { }
+
+  /**
+   * @function cerrarSesion
+   * @description Cierra la sesión actual en Amazon Cognito y redirige al inicio.
+   * @async
+   */
+  async cerrarSesion() {
+    try {
+      await signOut();
+      console.log('Sesión cerrada correctamente');
+      this.router.navigate(['/inicio']);
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
   }
-
-
-
-
+}

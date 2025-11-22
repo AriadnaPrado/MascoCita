@@ -1,152 +1,163 @@
 /**
  * @file Archivo principal del servidor backend (API) de Mascocita.
- * @description Inicia un servidor Express, se conecta a la BD y sincroniza los modelos.
- * El uso de Node.js y Express se alinea con la documentación del proyecto.
  * @module index
+ * @description Punto de entrada de la aplicación Node.js. Se encarga de:
+ * 1. Configurar e iniciar el servidor Express.
+ * 2. Establecer la conexión con Amazon RDS (MariaDB) mediante Sequelize.
+ * 3. Sincronizar los modelos de datos.
+ * 4. Exponer los endpoints REST para la comunicación con el Frontend.
+ * @requires express
+ * @requires cors
+ * @requires sequelize
  */
 
 const express = require('express');
+const cors = require('cors');
 
 /**
- * Importamos la instancia de Sequelize (conexión a la BD).
+ * Instancia de conexión a la base de datos configurada con credenciales de AWS RDS.
  * @type {import('sequelize').Sequelize}
+ * @see module:config/database
  */
 const sequelize = require('./config/database');
 
 /**
- * Importamos los modelos definidos para la sincronización.
- * @type {import('sequelize').ModelCtor<import('./models/Usuario').Usuario>}
+ * Modelo de Usuario (Perfil).
+ * Importado para permitir la sincronización de la tabla 'Usuarios' en la BD.
+ * @type {import('sequelize').ModelCtor<import('./models/Usuario')>}
  */
 const Usuario = require('./models/Usuario');
-/* (A futuro, aquí importarás más modelos, ej: const Turno = require('./models/Turno');) */
-
-/** Instancia de la aplicación Express */
-const app = express();
-const port = 3000;
-
-/* --- Middlewares --- */
 
 /**
- * @description Middleware de Express para parsear (convertir)
- * las peticiones entrantes con formato JSON.
- * Esencial para que req.body funcione.
+ * Instancia de la aplicación Express.
+ */
+const app = express();
+
+/**
+ * Puerto de escucha del servidor.
+ * @constant {number}
+ */
+const port = 3000;
+
+/* -------------------------------------------------------------------------- */
+/* MIDDLEWARES                                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Configuración de CORS (Cross-Origin Resource Sharing).
+ * Permite que el frontend (ej. http://localhost:4200) realice peticiones a este backend.
+ */
+app.use(cors());
+
+/**
+ * Parser de JSON.
+ * Permite leer los datos enviados en el cuerpo (body) de las peticiones HTTP
+ * y los convierte en objetos JavaScript accesibles mediante req.body.
  */
 app.use(express.json());
 
+/* -------------------------------------------------------------------------- */
+/* INICIALIZACIÓN                                 */
+/* -------------------------------------------------------------------------- */
 
 /**
  * @function iniciarServidor
- * @description Función asíncrona que inicializa la conexión a la
- * base de datos y levanta el servidor Express.
  * @async
+ * @description Función orquestadora que inicializa la infraestructura del backend.
+ * Realiza la conexión a la base de datos, sincroniza las tablas y levanta el servidor HTTP.
+ * @throws {Error} Si falla la autenticación con la BD o la sincronización.
  */
 async function iniciarServidor() {
   try {
     /**
-     * Prueba la conexión a la base de datos.
+     * Verifica la conectividad con AWS RDS.
      */
     await sequelize.authenticate();
-    console.log('Conexión a AWS RDS (MariaDB) establecida correctamente.');
+    console.log('✅ Conexión a AWS RDS (MariaDB) establecida correctamente.');
 
     /**
-     * Sincroniza los modelos en modo "seguro" (sin force: true).
-     * Esto crea las tablas si no existen, pero NO las borra.
+     * Sincroniza los modelos definidos con la base de datos.
+     * Nota: No se utiliza { force: true } para preservar los datos existentes.
      */
-    await sequelize.sync(); 
-    console.log('Modelos sincronizados con la base de datos.');
+    await sequelize.sync();
+    console.log('✅ Modelos sincronizados con la base de datos.');
 
     /**
-     * Inicia el servidor Express.
+     * Inicia la escucha de peticiones HTTP.
      */
     app.listen(port, () => {
-      console.log(`Servidor backend escuchando en http://localhost:${port}`);
+      console.log(`🚀 Servidor backend escuchando en http://localhost:${port}`);
     });
 
   } catch (error) {
-    /**
-     * Maneja cualquier error durante la inicialización.
-     */
-    console.error('Error al iniciar el servidor o conectar a la BD:', error);
+    console.error('❌ Error crítico al iniciar el servidor:', error);
   }
 }
 
-/* --- Rutas de la API (Endpoints) --- */
+/* -------------------------------------------------------------------------- */
+/* RUTAS                                    */
+/* -------------------------------------------------------------------------- */
 
 /**
  * @route GET /
- * @description Ruta de prueba para verificar que el servidor está en línea.
+ * @description Endpoint de estado (Health Check).
+ * Verifica que la API está operativa y tiene conexión a la base de datos.
+ * @param {import('express').Request} req - Objeto de solicitud.
+ * @param {import('express').Response} res - Objeto de respuesta.
  */
 app.get('/', (req, res) => {
-  res.send('API de Mascocita. ¡Conectado a MariaDB en RDS!');
+  res.send('API de Mascocita funcionando y conectada a RDS.');
 });
 
 /**
  * @route POST /api/usuarios
- * @description Esta ruta está diseñada para ser llamada por nuestro PROPIO
- * frontend (Angular) después de que un usuario se confirma exitosamente
- * en AWS Cognito. El frontend enviará el 'id' (sub), 'email' y 'nombre'
- * del nuevo usuario para crear su perfil en nuestra BD.
- * @async
- * @param {object} req - El objeto de solicitud (request).
- * @param {object} req.body - El cuerpo de la solicitud, debe contener { id, email, nombre }.
- * @param {string} req.body.id - El ID 'sub' único de AWS Cognito.
- * @param {string} req.body.email - El email del usuario.
- * @param {string} req.body.nombre - El nombre del usuario.
- * @param {object} res - El objeto de respuesta (response).
+ * @description Crea un nuevo perfil de usuario en la base de datos RDS.
+ * Este endpoint es consumido por el Frontend inmediatamente después de un registro exitoso en Amazon Cognito.
+ * * @param {import('express').Request} req - Objeto de solicitud.
+ * @param {object} req.body - Datos del usuario.
+ * @param {string} req.body.id - El ID único (sub) proporcionado por Amazon Cognito.
+ * @param {string} req.body.email - El correo electrónico del usuario.
+ * @param {string} req.body.nombre - El nombre completo del usuario.
+ * @param {import('express').Response} res - Objeto de respuesta.
+ * * @returns {object} 201 - Objeto JSON con el usuario creado.
+ * @returns {object} 400 - Error de validación o duplicado.
+ * @returns {object} 500 - Error interno del servidor.
  */
 app.post('/api/usuarios', async (req, res) => {
   try {
-    /**
-     * Extraemos los datos del perfil del cuerpo de la solicitud.
-     * Estos datos vendrán de AWS (Lambda/Cognito).
-     */
     const { id, email, nombre } = req.body;
 
     /**
-     * Validación simple de entrada.
+     * Validación de campos requeridos.
      */
     if (!id || !email || !nombre) {
-      return res.status(400).json({ 
-        error: "Faltan datos requeridos: id, email, y nombre son necesarios." 
-      });
+      return res.status(400).json({ error: "Faltan datos: id, email y nombre son requeridos." });
     }
 
     /**
-     * Creamos el nuevo perfil de usuario en nuestra tabla 'Usuarios'
-     * usando el modelo de Sequelize.
+     * Creación del registro en la tabla 'Usuarios'.
      */
     const nuevoUsuario = await Usuario.create({
       id: id,
-      email: email,
-      nombre: nombre
+      nombre: nombre,
+      email: email
     });
 
-    /**
-     * Respondemos con un código 201 (Creado) y la información
-     * del perfil que se guardó en nuestra BD.
-     */
     res.status(201).json(nuevoUsuario);
 
   } catch (error) {
+    console.error('Error en POST /api/usuarios:', error);
+
     /**
-     * Manejo de errores.
-     * Si el email o el id ya existen, Sequelize arrojará un error
-     * de 'SequelizeUniqueConstraintError'.
+     * Manejo específico para violación de unicidad (ej. ID o Email ya registrados).
      */
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(400).json({ 
-        error: "Error de restricción única: El email o ID ya existe." 
-      });
+      return res.status(400).json({ error: "El usuario ya existe en la base de datos." });
     }
-    
-    /**
-     * Captura de cualquier otro error inesperado del servidor.
-     */
-    console.error('Error en POST /api/usuarios:', error);
+
     res.status(500).json({ error: 'Error interno del servidor.' });
   }
 });
 
-
-/* --- Inicio de la Aplicación --- */
+/* Ejecución de la función de inicio */
 iniciarServidor();
