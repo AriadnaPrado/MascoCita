@@ -38,43 +38,6 @@ app.use(cors());
  * @description Middleware de Express para parsear JSON.
  */
 app.use(express.json());
-/* -------------------------------------------------------------------------- */
-/* INICIALIZACIÓN                                 */
-/* -------------------------------------------------------------------------- */
-
-/**
- * @function iniciarServidor
- * @async
- * @description Función orquestadora que inicializa la infraestructura del backend.
- * Realiza la conexión a la base de datos, sincroniza las tablas y levanta el servidor HTTP.
- * @throws {Error} Si falla la autenticación con la BD o la sincronización.
- */
-async function iniciarServidor() {
-  try {
-    /**
-     * Verifica la conectividad con AWS RDS.
-     */
-    await sequelize.authenticate();
-    console.log(' Conexión a AWS RDS (MariaDB) establecida correctamente.');
-
-    /**
-     * Sincroniza los modelos definidos con la base de datos.
-     * Nota: No se utiliza { force: true } para preservar los datos existentes.
-     */
-    await sequelize.sync();
-    console.log(' Modelos sincronizados con la base de datos.');
-
-    /**
-     * Inicia la escucha de peticiones HTTP.
-     */
-    app.listen(port, () => {
-      console.log(`Servidor backend escuchando en http://localhost:${port}`);
-    });
-
-  } catch (error) {
-    console.error( 'Error crítico al iniciar el servidor:', error);
-  }
-}
 
 /* -------------------------------------------------------------------------- */
 /* RUTAS                                    */

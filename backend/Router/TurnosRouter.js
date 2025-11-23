@@ -11,4 +11,10 @@ router.get("/disponibles", turnoController.getTurnosDisponibles);
 // El cliente se asigna un turno
 router.put("/asignar/:id", turnoController.asignarTurno);
 
+// Admin
+router.get("/admin/todos", turnoController.adminGetTodos);
+router.post("/admin/crear", turnoController.adminCrearTurno);
+router.put("/admin/confirmar/:id", turnoController.adminConfirmarTurno);
+router.put("/admin/cancelar/:id", turnoController.adminCancelarTurno);
+
 module.exports = router;

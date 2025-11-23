@@ -77,3 +77,53 @@ exports.asignarTurno = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
+
+exports.adminGetTodos = async (req, res) => {
+  try {
+    const turnos = await Turno.findAll();
+    return res.json(turnos);
+  } catch (error) {
+    res.status(500).json({ error: "No se pudieron obtener los turnos." });
+  }
+};
+
+exports.adminCrearTurno = async (req, res) => {
+  try {
+    const { fecha, hora, servicio } = req.body;
+
+    if (!fecha || !hora || !servicio) {
+      return res.status(400).json({ error: "Faltan campos" });
+    }
+
+    const nuevoTurno = await Turno.create({
+      fecha,
+      hora,
+      servicio,
+      estado: "Pendiente",
+      idCliente: null
+    });
+
+    res.status(201).json(nuevoTurno);
+
+  } catch (error) {
+    res.status(500).json({ error: "Error al crear turno" });
+  }
+};
+
+exports.adminConfirmarTurno = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const turno = await Turno.findByPk(id);
+    if (!turno) return res.status(404).json({ error: "Turno no encontrado" });
+
+    turno.estado = "Confirmado";
+    await turno.save();
+
+    res.json({ mensaje: "Turno confirmado", turno });
+
+  } catch (error) {
+    res.status(500).json({ error: "Error al confirmar turno" });
+  }
+};
+
