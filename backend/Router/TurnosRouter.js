@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const turnoController = require("../Controller/TurnosController");
+const turnoController = require("../controller/TurnosController");
 
 // Turnos del cliente
 router.get("/cliente", turnoController.getTurnosDelCliente);
