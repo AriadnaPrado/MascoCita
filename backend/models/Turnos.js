@@ -1,46 +1,61 @@
+/**
+ * @file Definición del modelo Turno.
+ * @module models/Turno
+ * @description Modelo Sequelize para la gestión de turnos.
+ */
+
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 /**
- * Modelo Turno
- * 
- * Estados permitidos:
- * - "Disponible" → El turno está libre y se muestra al cliente.
- * - "Reservado"  → Un cliente reservó el turno.
- * - "Confirmado" → Admin confirmó el turno.
- * - "Cancelado"  → Admin lo canceló (puede quedar libre de nuevo si así se decide).
+ * @constant {import('sequelize').ModelCtor<Turno>} Turno
+ * @description Definición del modelo Turno.
  */
 const Turno = sequelize.define("Turno", {
+  /**
+   * @description Identificador único del turno.
+   */
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
 
+  /**
+   * @description Fecha del turno.
+   */
   fecha: {
     type: DataTypes.DATEONLY,
     allowNull: false,
   },
 
+  /**
+   * @description Hora del turno.
+   */
   hora: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 
+  /**
+   * @description Servicio solicitado.
+   */
   servicio: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 
+  /**
+   * @description Estado actual del turno.
+   * @default 'Disponible'
+   */
   estado: {
     type: DataTypes.ENUM("Disponible", "Reservado", "Confirmado", "Cancelado"),
     defaultValue: "Disponible",
   },
 
   /**
-   * ID del cliente que reservó el turno.
-   * Es el "sub" de Cognito (STRING).
-   * Si es null → el turno está disponible.
+   * @description Identificador del cliente que reservó el turno (sub de Cognito).
    */
   idCliente: {
     type: DataTypes.STRING,

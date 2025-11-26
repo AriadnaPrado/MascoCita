@@ -42,16 +42,15 @@
         </td>
 
         <td>
-          <button 
-            *ngIf="t.estado === 'Reservado'"
-            (click)="confirmar(t)">
+          <button *ngIf="t.estado === 'Reservado'" (click)="confirmar(t)">
             Confirmar
           </button>
 
-          <button 
-            class="cancelar"
-            *ngIf="t.estado !== 'Cancelado'"
-            (click)="cancelar(t)">
+          <button class="publicar" *ngIf="t.estado === 'Pendiente'" (click)="publicar(t)">
+            Publicar
+          </button>
+
+          <button class="cancelar" *ngIf="t.estado !== 'Cancelado'" (click)="cancelar(t)">
             Cancelar
           </button>
         </td>

@@ -1,29 +1,28 @@
+/**
+ * @file Punto de entrada principal de la aplicación Angular.
+ * @description Inicializa la aplicación y configura AWS Amplify.
+ */
+
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
-
-/**
- * Importamos la clase 'Amplify' desde la librería que instalamos.
- */
 import { Amplify } from 'aws-amplify';
 
 /**
- * Configuracion de ID
+ * @description Configuración de AWS Amplify con los parámetros de Cognito.
  */
 Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolId: 'us-east-1_g18FzgHaq', 
-      userPoolClientId: '2t5ja1c92l1qmp4vpbj2195jdd' 
+      userPoolId: 'us-east-1_g18FzgHaq',
+      userPoolClientId: '2t5ja1c92l1qmp4vpbj2195jdd'
     }
   }
 });
 
-
 /**
- * Esta es la llamada original para iniciar tu app.
+ * @description Inicialización de la aplicación Angular.
  */
 bootstrapApplication(App, appConfig)
-
   .catch((err) => console.error(err));
 

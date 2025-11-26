@@ -8,7 +8,7 @@ export class ApiTurnosService {
 
   private baseUrl = 'http://localhost:3000/api/turnos';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /* ================================
      CLIENTE
@@ -52,6 +52,11 @@ export class ApiTurnosService {
   // Cancelar turno → pasa a "Cancelado"
   cancelarTurno(idTurno: number): Observable<any> {
     return this.http.put(`${this.baseUrl}/admin/cancelar/${idTurno}`, {});
+  }
+
+  // Publicar turno → pasa a "Disponible"
+  publicarTurno(idTurno: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/admin/publicar/${idTurno}`, {});
   }
 
 }

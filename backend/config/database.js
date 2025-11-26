@@ -1,21 +1,34 @@
 /**
- * @file Configura la conexión centralizada a la base de datos (AWS RDS)
- * utilizando Sequelize.
+ * @file Configuración de la conexión a la base de datos.
  * @module config/database
+ * @description Establece la conexión con la base de datos AWS RDS utilizando Sequelize.
  */
 
 const { Sequelize } = require('sequelize');
 
-// --- TUS DATOS DE RDS ---
-// Asegúrate de que sean EXACTAMENTE los mismos que funcionaron en tu test.
+/**
+ * @constant {string} DB_NAME - Nombre de la base de datos.
+ */
 const DB_NAME = 'mascocitadb';
-const DB_USER = 'admin';
-const DB_PASS = 'Falsoraton78';
-const DB_HOST = 'mascocita-db.ct8ui22coaxu.us-east-1.rds.amazonaws.com';
-// ------------------------
 
 /**
- * Instancia de Sequelize para la conexión con MariaDB.
+ * @constant {string} DB_USER - Usuario de la base de datos.
+ */
+const DB_USER = 'admin';
+
+/**
+ * @constant {string} DB_PASS - Contraseña de la base de datos.
+ */
+const DB_PASS = 'Falsoraton78';
+
+/**
+ * @constant {string} DB_HOST - Host de la base de datos.
+ */
+const DB_HOST = 'mascocita-db.ct8ui22coaxu.us-east-1.rds.amazonaws.com';
+
+/**
+ * @constant {import('sequelize').Sequelize} sequelize
+ * @description Instancia de Sequelize configurada para MariaDB.
  */
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
   host: DB_HOST,
@@ -23,32 +36,22 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
   logging: console.log,
 
   /**
-   * Opciones que se pasan DIRECTAMENTE al driver 'mariadb'.
-   * Estas son las que funcionaron en tu script 'test-crear-db.js'.
+   * @description Opciones específicas del dialecto MariaDB.
    */
   dialectOptions: {
-    // Configuración SSL obligatoria para AWS RDS
     ssl: {
       rejectUnauthorized: false
     },
-    // Tiempo máximo que el driver esperará para establecer la conexión TCP inicial.
-    // Aumentado a 60 segundos (60000 ms) para descartar latencia.
     connectTimeout: 60000
   },
 
   /**
-   * Configuración del Pool de Conexiones de Sequelize.
-   * Sequelize mantiene conexiones abiertas para reutilizarlas.
+   * @description Configuración del pool de conexiones.
    */
   pool: {
-    max: 5,     // Máximo de conexiones simultáneas
-    min: 0,     // Mínimo (0 permite cerrar todas si no se usan)
-
-    // Tiempo máximo (ms) que Sequelize intentará obtener una conexión antes de tirar error.
-    // Aumentado a 60 segundos para igualar al connectTimeout.
+    max: 5,
+    min: 0,
     acquire: 60000,
-
-    // Tiempo (ms) que una conexión puede estar inactiva antes de cerrarse.
     idle: 10000
   }
 });

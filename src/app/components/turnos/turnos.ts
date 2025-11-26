@@ -1,10 +1,22 @@
+/**
+ * @file Componente de gestión de turnos.
+ * @module components/turnos
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Turno } from '../models/turnosmodel';
+import { ApiTurnosService } from '../../services/apiTurnos';
+import { getCurrentUser } from 'aws-amplify/auth';
 
-import { Turno } from '../models/turnosmodel';              // Modelo (class)
-import { ApiTurnosService } from '../../services/apiTurnos'; // Service de la API
-
+/**
+ * @class Turnos
+ * @description Componente que permite a los usuarios visualizar turnos disponibles y gestionar sus reservas.
+ * @component
+ * @selector app-turnos
+ * @standalone true
+ */
 @Component({
   selector: 'app-turnos',
   templateUrl: './turnos.html',
@@ -13,35 +25,66 @@ import { ApiTurnosService } from '../../services/apiTurnos'; // Service de la AP
 })
 export class Turnos implements OnInit {
 
+  /**
+   * @property {boolean} mostrarDisponibles - Controla la visibilidad de la lista de turnos disponibles.
+   */
   mostrarDisponibles: boolean = false;
 
-
-  /** Turnos disponibles que vienen del backend */
+  /**
+   * @property {Turno[]} turnosDisponibles - Lista de turnos disponibles obtenidos del backend.
+   */
   turnosDisponibles: Turno[] = [];
 
-  /** Turnos ya reservados por el cliente */
+  /**
+   * @property {Turno[]} turnosDelCliente - Lista de turnos reservados por el cliente actual.
+   */
   turnosDelCliente: Turno[] = [];
 
-  /** ID del cliente (sub de Cognito). 
-   *  Por ahora lo tomamos de localStorage hasta que esté integrada la auth.
+  /**
+   * @property {string} idCliente - Identificador único del cliente (sub de Cognito).
    */
   idCliente: string = '';
 
-  /** Flags de estado simples */
+  /**
+   * @property {boolean} cargando - Indica si se está realizando una operación de carga.
+   */
   cargando: boolean = true;
+
+  /**
+   * @property {string} errorMensaje - Mensaje de error para mostrar en la interfaz.
+   */
   errorMensaje: string = '';
 
-  constructor(private turnoService: ApiTurnosService) {}
+  /**
+   * @constructor
+   * @param {ApiTurnosService} turnoService - Servicio para la gestión de turnos.
+   */
+  constructor(private turnoService: ApiTurnosService) { }
 
-  ngOnInit(): void {
-    // TODO: reemplazar esto por el sub real de Cognito cuando tengas la auth
-    this.idCliente = localStorage.getItem('idCliente') || '';
+  /**
+   * @method ngOnInit
+   * @description Inicializa el componente, obtiene el usuario actual y carga sus turnos y los disponibles.
+   * @returns {Promise<void>}
+   */
+  async ngOnInit(): Promise<void> {
+    try {
+      const user = await getCurrentUser();
+      this.idCliente = user.userId;
 
-    this.cargarTurnosDisponibles();
-    this.cargarTurnosDelCliente();
+      this.cargarTurnosDisponibles();
+      this.cargarTurnosDelCliente();
+    } catch (error) {
+      console.error('Error al obtener usuario:', error);
+      this.errorMensaje = 'Debes iniciar sesión para ver tus turnos.';
+      this.cargando = false;
+    }
   }
 
-  /** Llama a GET /api/turnos/disponibles */
+  /**
+   * @method cargarTurnosDisponibles
+   * @description Obtiene la lista de turnos disponibles desde el backend.
+   * @returns {void}
+   */
   cargarTurnosDisponibles(): void {
     this.cargando = true;
     this.turnoService.getTurnosDisponibles().subscribe({
@@ -57,7 +100,11 @@ export class Turnos implements OnInit {
     });
   }
 
-  /** Llama a GET /api/turnos/cliente?idCliente=... */
+  /**
+   * @method cargarTurnosDelCliente
+   * @description Obtiene la lista de turnos reservados por el cliente actual.
+   * @returns {void}
+   */
   cargarTurnosDelCliente(): void {
     if (!this.idCliente) {
       console.warn('No hay idCliente definido todavía.');
@@ -75,7 +122,12 @@ export class Turnos implements OnInit {
     });
   }
 
-  /** Llama a PUT /api/turnos/asignar/:id para reservar un turno */
+  /**
+   * @method reservar
+   * @description Reserva un turno específico para el cliente actual.
+   * @param {Turno} turno - El turno a reservar.
+   * @returns {void}
+   */
   reservar(turno: Turno): void {
     if (!this.idCliente) {
       alert('No se encontró el id del cliente. Debes iniciar sesión.');
@@ -87,7 +139,6 @@ export class Turnos implements OnInit {
         console.log('Turno asignado:', respuesta);
         alert('Turno reservado correctamente ');
 
-        // Refrescamos las listas
         this.cargarTurnosDisponibles();
         this.cargarTurnosDelCliente();
       },
@@ -98,8 +149,13 @@ export class Turnos implements OnInit {
     });
   }
 
-  toggleDisponibles() {
-  this.mostrarDisponibles = !this.mostrarDisponibles;
-}
+  /**
+   * @method toggleDisponibles
+   * @description Alterna la visibilidad de la sección de turnos disponibles.
+   * @returns {void}
+   */
+  toggleDisponibles(): void {
+    this.mostrarDisponibles = !this.mostrarDisponibles;
+  }
 
 }

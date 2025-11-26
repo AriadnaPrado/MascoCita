@@ -1,39 +1,28 @@
 /**
- * @file Define el modelo (tabla) 'Usuario' utilizando Sequelize.
- * @description Esta tabla almacena información del PERFIL del usuario,
- * no su información de autenticación (la cual es manejada por AWS Cognito).
+ * @file Definición del modelo Usuario.
  * @module models/Usuario
+ * @description Modelo Sequelize para la tabla de usuarios. Almacena información del perfil de usuario.
  */
 
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Importa la conexión
+const sequelize = require('../config/database');
 
 /**
  * @typedef {object} Usuario
- * @description Define la estructura del perfil de Usuario.
- *
- * @property {string} id - El ID de usuario proveído por AWS Cognito (conocido como 'sub').
- * Se usará como nuestra Llave Primaria (Primary Key).
- * @property {string} nombre - Nombre del usuario.
- * @property {string} email - Email del usuario (debe ser único).
+ * @description Estructura del modelo Usuario.
+ * @property {string} id - Identificador único (sub de Cognito).
+ * @property {string} nombre - Nombre completo del usuario.
+ * @property {string} email - Correo electrónico del usuario.
+ * @property {string} rol - Rol del usuario (cliente o admin).
  */
 
 /**
- * Definición del modelo 'Usuario' que representa la tabla 'Usuarios' en la BD.
- *
- * @type {import('sequelize').ModelCtor<Usuario>}
+ * @constant {import('sequelize').ModelCtor<Usuario>} Usuario
+ * @description Definición del modelo Usuario.
  */
 const Usuario = sequelize.define('Usuario', {
   /**
-   * Columna 'id' (Llave Primaria).
-   * @description Almacenará el ID único (UUID o 'sub') que AWS Cognito
-   * asigna a cada usuario. Esto vincula nuestra tabla de perfiles
-   * con el sistema de autenticación de Cognito.
-   * Reemplaza al 'id' auto-incremental por defecto.
-   * @type {DataTypes.STRING}
-   * @param {object} options - Opciones de la columna.
-   * @param {boolean} options.primaryKey - Define esta columna como la Llave Primaria.
-   * @param {boolean} options.allowNull - No puede ser nula.
+   * @description Identificador único del usuario. Corresponde al 'sub' de AWS Cognito.
    */
   id: {
     type: DataTypes.STRING,
@@ -42,35 +31,30 @@ const Usuario = sequelize.define('Usuario', {
   },
 
   /**
-   * Columna 'nombre'. Requerido (NOT NULL).
-   * Almacena el nombre del perfil del usuario.
-   *
+   * @description Nombre completo del usuario.
    */
   nombre: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  
+
   /**
-   * Columna 'email'. Requerido (NOT NULL) y único (UNIQUE).
-   * Almacena el email del usuario para referencia y búsquedas.
-   * 
+   * @description Correo electrónico del usuario. Debe ser único.
    */
   email: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
-  }
+  },
 
   /**
-   * AWS Cognito gestionará la autenticación y las contraseñas.
+   * @description Rol del usuario en el sistema.
+   * @default 'cliente'
    */
-  
-  /* Nota: Sequelize aún añade 'createdAt' y 'updatedAt' automáticamente. */
+  rol: {
+    type: DataTypes.ENUM('cliente', 'admin'),
+    defaultValue: 'cliente'
+  }
 });
 
-/**
- * Exporta el modelo 'Usuario' para ser usado en otras partes de la aplicación.
- * @exports Usuario
- */
 module.exports = Usuario;

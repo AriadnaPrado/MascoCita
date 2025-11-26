@@ -1,12 +1,23 @@
 <header>
   <h1>MascoCita</h1>
   <nav>
+    <!-- Si NO está autenticado -->
+    @if (!isAuthenticated) {
     <a routerLink="/inicio" routerLinkActive="active">Inicio</a>
     <a routerLink="/registro" routerLinkActive="active">Registrate</a>
+    <a routerLink="/login" routerLinkActive="active">Ingresar</a>
+    }
+
+    <!-- Si ESTÁ autenticado -->
+    @if (isAuthenticated) {
     <a routerLink="/turnos" routerLinkActive="active">Turnos</a>
+
+    @if (isAdmin) {
     <a routerLink="/admin-panel" routerLinkActive="active">Admin</a>
+    }
 
     <a style="cursor: pointer;" (click)="cerrarSesion()">Cerrar Sesión</a>
+    }
   </nav>
 </header>
 

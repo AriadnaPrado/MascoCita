@@ -127,3 +127,37 @@ exports.adminConfirmarTurno = async (req, res) => {
   }
 };
 
+exports.adminCancelarTurno = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const turno = await Turno.findByPk(id);
+    if (!turno) return res.status(404).json({ error: "Turno no encontrado" });
+
+    turno.estado = "Cancelado";
+    await turno.save();
+
+    res.json({ mensaje: "Turno cancelado", turno });
+
+  } catch (error) {
+    res.status(500).json({ error: "Error al cancelar turno" });
+  }
+};
+
+exports.adminPublicarTurno = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const turno = await Turno.findByPk(id);
+    if (!turno) return res.status(404).json({ error: "Turno no encontrado" });
+
+    turno.estado = "Disponible";
+    await turno.save();
+
+    res.json({ mensaje: "Turno publicado", turno });
+
+  } catch (error) {
+    res.status(500).json({ error: "Error al publicar turno" });
+  }
+};
+
