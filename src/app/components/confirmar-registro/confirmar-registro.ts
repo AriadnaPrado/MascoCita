@@ -1,41 +1,59 @@
+/**
+ * @file Componente de confirmación de registro.
+ * @module components/confirmar-registro
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-
-/** Importamos FormsModule para que funcionen los formularios en el HTML */
 import { FormsModule } from '@angular/forms';
-
-/** Importamos las funciones de autenticación de Amplify */
 import { confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 
+/**
+ * @class ConfirmarRegistro
+ * @description Componente que maneja la confirmación de la cuenta de usuario mediante el código enviado por email.
+ * @component
+ * @selector app-confirmar-registro
+ * @standalone true
+ */
 @Component({
   selector: 'app-confirmar-registro',
   standalone: true,
-  
-  /** * Importante: Agregamos FormsModule aquí.
-   * Esto permite usar <form #confirmForm="ngForm"> en el HTML.
-   */
-  imports: [CommonModule, FormsModule], 
-  
+  imports: [CommonModule, FormsModule],
   templateUrl: './confirmar-registro.html',
   styleUrls: ['./confirmar-registro.css']
 })
 export class ConfirmarRegistro implements OnInit {
-  
+
+  /**
+   * @property {string} email - Correo electrónico del usuario a confirmar.
+   */
   email: string = '';
+
+  /**
+   * @property {string} code - Código de confirmación ingresado por el usuario.
+   */
   code: string = '';
+
+  /**
+   * @property {string} errorMessage - Mensaje de error para mostrar en la interfaz.
+   */
   errorMessage: string = '';
 
+  /**
+   * @constructor
+   * @param {Router} router - Servicio de enrutamiento.
+   * @param {ActivatedRoute} route - Servicio para acceder a los parámetros de la ruta activa.
+   */
   constructor(
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   /**
-   * @function ngOnInit
-   * @description Método del ciclo de vida de Angular.
-   * Se ejecuta al iniciar el componente.
-   * Captura el email enviado por la URL desde el registro.
+   * @method ngOnInit
+   * @description Inicializa el componente recuperando el email de los parámetros de la URL.
+   * @returns {void}
    */
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -44,19 +62,18 @@ export class ConfirmarRegistro implements OnInit {
   }
 
   /**
-   * @function onConfirmar
-   * @description Envía el código de 6 dígitos a Cognito para validar el email.
-   * Si es exitoso, redirige al login.
-   * @param {any} form - El objeto del formulario Angular.
+   * @method onConfirmar
+   * @description Envía el código de confirmación a AWS Cognito para validar la cuenta.
+   * @param {any} form - Formulario de Angular.
+   * @returns {Promise<void>}
    */
-  async onConfirmar(form: any) {
+  async onConfirmar(form: any): Promise<void> {
     if (!form.valid) {
       this.errorMessage = 'Por favor, ingresa el código de 6 dígitos.';
       return;
     }
 
     try {
-      /** Enviamos la confirmación a AWS Cognito */
       const { isSignUpComplete } = await confirmSignUp({
         username: this.email,
         confirmationCode: this.code
@@ -74,10 +91,11 @@ export class ConfirmarRegistro implements OnInit {
   }
 
   /**
-   * @function onReenviarCodigo
-   * @description Solicita a Cognito que reenvíe el código al email del usuario.
+   * @method onReenviarCodigo
+   * @description Solicita el reenvío del código de confirmación al email del usuario.
+   * @returns {Promise<void>}
    */
-  async onReenviarCodigo() {
+  async onReenviarCodigo(): Promise<void> {
     if (!this.email) {
       this.errorMessage = 'No hay email para reenviar.';
       return;

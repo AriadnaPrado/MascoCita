@@ -1,11 +1,7 @@
 /**
- * @file Archivo principal del servidor backend (API) de Mascocita.
+ * @file Archivo principal del servidor backend (API).
  * @module index
- * @description Punto de entrada de la aplicación Node.js. Se encarga de:
- * 1. Configurar e iniciar el servidor Express.
- * 2. Establecer la conexión con Amazon RDS (MariaDB) mediante Sequelize.
- * 3. Sincronizar los modelos de datos.
- * 4. Exponer los endpoints REST para la comunicación con el Frontend.
+ * @description Punto de entrada de la aplicación Node.js. Configura el servidor Express, la conexión a base de datos y los endpoints.
  * @requires express
  * @requires cors
  * @requires sequelize
@@ -15,38 +11,39 @@ const express = require('express');
 const cors = require('cors');
 
 /**
- * Instancia de conexión a la base de datos configurada con credenciales de AWS RDS.
- * @type {import('sequelize').Sequelize}
+ * @constant {import('sequelize').Sequelize} sequelize
+ * @description Instancia de conexión a la base de datos.
  * @see module:config/database
  */
 const sequelize = require('./config/database');
 
 /**
- * Importamos los modelos definidos para la sincronización.
+ * @description Importación de modelos para sincronización.
  */
-const Usuario = require('./models/Usuario');   // Modelo de Usuario
-const Turno = require('./models/Turnos');       // Modelo de Turno (nuevo)
-
-/** Instancia de la aplicación Express */
-const app = express();
-const port = 3000;
-app.use(cors());
-
-/* --- Middlewares --- */
+const Usuario = require('./models/Usuario');
+const Turno = require('./models/Turnos');
 
 /**
- * @description Middleware de Express para parsear JSON.
+ * @constant {import('express').Application} app
+ * @description Instancia de la aplicación Express.
+ */
+const app = express();
+const port = 3000;
+
+app.use(cors());
+
+/**
+ * @description Middleware para el parseo de cuerpos JSON en las peticiones.
  */
 app.use(express.json());
 
 /* -------------------------------------------------------------------------- */
-/* RUTAS                                    */
+/* RUTAS                                                                      */
 /* -------------------------------------------------------------------------- */
 
 /**
  * @route GET /
- * @description Endpoint de estado (Health Check).
- * Verifica que la API está operativa y tiene conexión a la base de datos.
+ * @description Endpoint de verificación de estado (Health Check).
  * @param {import('express').Request} req - Objeto de solicitud.
  * @param {import('express').Response} res - Objeto de respuesta.
  */
@@ -56,16 +53,14 @@ app.get('/', (req, res) => {
 
 /**
  * @route POST /api/usuarios
-
- * @description Crea un nuevo perfil de usuario en la base de datos RDS.
- * Este endpoint es consumido por el Frontend inmediatamente después de un registro exitoso en Amazon Cognito.
- * * @param {import('express').Request} req - Objeto de solicitud.
- * @param {object} req.body - Datos del usuario.
- * @param {string} req.body.id - El ID único (sub) proporcionado por Amazon Cognito.
- * @param {string} req.body.email - El correo electrónico del usuario.
- * @param {string} req.body.nombre - El nombre completo del usuario.
+ * @description Crea un nuevo perfil de usuario en la base de datos.
+ * @param {import('express').Request} req - Objeto de solicitud.
+ * @param {object} req.body - Cuerpo de la solicitud.
+ * @param {string} req.body.id - Identificador único del usuario (sub).
+ * @param {string} req.body.email - Correo electrónico del usuario.
+ * @param {string} req.body.nombre - Nombre completo del usuario.
  * @param {import('express').Response} res - Objeto de respuesta.
- * * @returns {object} 201 - Objeto JSON con el usuario creado.
+ * @returns {object} 201 - Usuario creado exitosamente.
  * @returns {object} 400 - Error de validación o duplicado.
  * @returns {object} 500 - Error interno del servidor.
  */
@@ -77,7 +72,6 @@ app.post('/api/usuarios', async (req, res) => {
         error: "Faltan datos requeridos: id, email, y nombre son necesarios."
       });
     }
-
 
     const nuevoUsuario = await Usuario.create({
       id: id,
@@ -100,15 +94,23 @@ app.post('/api/usuarios', async (req, res) => {
   }
 });
 
-
 /**
- * @route /api/turnos
- * @description Rutas para gestionar turnos de clientes y admin.
+ * @description Rutas para la gestión de turnos.
  */
 app.use("/api/turnos", require("./Router/TurnosRouter"));
 
+/**
+ * @description Rutas para la gestión de usuarios.
+ */
+app.use("/api/usuarios", require("./Router/UsuarioRouter"));
+
 /* --- Inicio del Servidor --- */
 
+/**
+ * @function iniciarServidor
+ * @description Inicializa la conexión a la base de datos y pone en marcha el servidor Express.
+ * @returns {Promise<void>}
+ */
 async function iniciarServidor() {
   try {
     await sequelize.authenticate();
