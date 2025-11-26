@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const turnoController = require("../controller/TurnosController");
+const turnoController = require("../Controller/TurnosController");
 
 // Turnos del cliente
 router.get("/cliente", turnoController.getTurnosDelCliente);
@@ -15,6 +15,5 @@ router.put("/asignar/:id", turnoController.asignarTurno);
 router.get("/admin/todos", turnoController.adminGetTodos);
 router.post("/admin/crear", turnoController.adminCrearTurno);
 router.put("/admin/confirmar/:id", turnoController.adminConfirmarTurno);
-router.put("/admin/cancelar/:id", turnoController.adminCancelarTurno);
 
 module.exports = router;
