@@ -1,7 +1,7 @@
 /**
  * @file Componente de Registro de Usuarios.
  * @description Gestiona el formulario de registro, la creación de la cuenta en Amazon Cognito
- * y la persistencia del perfil del usuario en el backend (RDS).
+ * y la persistencia del perfil del usuario en el backend.
  * @module components/registro
  */
 
@@ -13,9 +13,11 @@ import { HttpClient } from '@angular/common/http';
 import { signUp } from 'aws-amplify/auth';
 
 /**
- * @component Registro
- * @description Componente que renderiza el formulario de registro y maneja la lógica
- * de autenticación híbrida (Cognito + Base de Datos propia).
+ * @class Registro
+ * @description Componente que renderiza el formulario de registro y maneja la lógica de autenticación híbrida.
+ * @component
+ * @selector app-registro
+ * @standalone true
  */
 @Component({
   selector: 'app-registro',
@@ -25,52 +27,58 @@ import { signUp } from 'aws-amplify/auth';
   styleUrls: ['./registro.css']
 })
 export class Registro {
-  /** @property {string} nombre - Nombre completo del usuario ingresado en el formulario. */
+  /**
+   * @property {string} nombre - Nombre completo del usuario.
+   */
   nombre = '';
 
-  /** @property {string} email - Correo electrónico del usuario (identificador único). */
+  /**
+   * @property {string} email - Correo electrónico del usuario.
+   */
   email = '';
 
-  /** @property {string} password - Contraseña elegida por el usuario. */
+  /**
+   * @property {string} password - Contraseña del usuario.
+   */
   password = '';
 
-  /** @property {string} confirmPassword - Campo de confirmación de contraseña. */
+  /**
+   * @property {string} confirmPassword - Confirmación de la contraseña.
+   */
   confirmPassword = '';
 
-  /** @property {boolean} passwordMismatch - Bandera para indicar si las contraseñas no coinciden. */
+  /**
+   * @property {boolean} passwordMismatch - Indica si las contraseñas no coinciden.
+   */
   passwordMismatch = false;
 
-  /** @property {string} errorMessage - Mensaje de error para mostrar en la UI. */
+  /**
+   * @property {string} errorMessage - Mensaje de error para mostrar en la interfaz.
+   */
   errorMessage = '';
 
   /**
    * @constructor
-   * @param {Router} router - Servicio de Angular para la navegación entre rutas.
-   * @param {HttpClient} http - Cliente HTTP para realizar peticiones al backend (API).
+   * @param {Router} router - Servicio de enrutamiento.
+   * @param {HttpClient} http - Cliente HTTP para peticiones al backend.
    */
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) { }
 
   /**
    * @method onRegister
-   * @async
-   * @description Ejecuta el flujo completo de registro:
-   * 1. Valida el formulario localmente.
-   * 2. Crea la cuenta segura en Amazon Cognito.
-   * 3. Envía los datos del perfil al backend para guardarlos en RDS.
-   * 4. Redirige al usuario a la pantalla de confirmación de código.
-   * @param {any} form - El objeto del formulario de Angular (ngForm).
+   * @description Ejecuta el proceso de registro: validación, creación de cuenta en Cognito y guardado de perfil en backend.
+   * @param {any} form - Formulario de Angular.
+   * @returns {Promise<void>}
    */
-  async onRegister(form: any) {
+  async onRegister(form: any): Promise<void> {
     this.passwordMismatch = false;
     this.errorMessage = '';
 
-    /** Validación: Verifica si el formulario es válido según las reglas HTML. */
     if (!form.valid) {
       this.errorMessage = 'Por favor completá todos los campos correctamente.';
       return;
     }
 
-    /** Validación: Verifica la coincidencia de contraseñas. */
     if (this.password !== this.confirmPassword) {
       this.passwordMismatch = true;
       this.errorMessage = 'Las contraseñas no coinciden.';
@@ -78,11 +86,6 @@ export class Registro {
     }
 
     try {
-      /**
-       * Paso 1: Registro en Amazon Cognito.
-       * Se utiliza la función `signUp` de Amplify para crear el usuario en el User Pool.
-       * Se envían 'nombre' y 'email' como atributos estándar del usuario.
-       */
       const { userId, nextStep } = await signUp({
         username: this.email,
         password: this.password,
@@ -95,10 +98,6 @@ export class Registro {
       });
       console.log('Usuario creado en Cognito. ID:', userId);
 
-      /**
-       * Paso 2: Guardado del Perfil en Backend (RDS).
-       * Se prepara el objeto con el ID de Cognito (sub) para vincular ambas bases de datos.
-       */
       const urlBackend = 'http://localhost:3000/api/usuarios';
       const perfilUsuario = {
         id: userId,
@@ -106,21 +105,11 @@ export class Registro {
         email: this.email
       };
 
-      /**
-       * Petición HTTP POST al backend.
-       * Envía los datos del perfil para ser almacenados en la tabla 'Usuarios'.
-       * Se utiliza .subscribe() para ejecutar la petición (Observable).
-       */
       this.http.post(urlBackend, perfilUsuario).subscribe({
         next: (res) => console.log('Perfil guardado en Base de Datos:', res),
         error: (err) => console.error('Error al guardar en Base de Datos:', err)
       });
 
-      /**
-       * Paso 3: Redirección.
-       * Si Cognito requiere confirmación (código por email), redirige al componente 'ConfirmarRegistro'.
-       * Se pasa el email como parámetro de consulta para facilitar el flujo al usuario.
-       */
       if (nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
         alert('¡Registro exitoso! Te hemos enviado un código a tu email.');
         this.router.navigate(['/confirmar-registro'], { queryParams: { email: this.email } });

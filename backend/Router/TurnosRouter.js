@@ -16,4 +16,7 @@ router.get("/admin/todos", turnoController.adminGetTodos);
 router.post("/admin/crear", turnoController.adminCrearTurno);
 router.put("/admin/confirmar/:id", turnoController.adminConfirmarTurno);
 
+router.put("/admin/cancelar/:id", turnoController.adminCancelarTurno);
+router.put("/admin/publicar/:id", turnoController.adminPublicarTurno);
+
 module.exports = router;

@@ -1,10 +1,21 @@
+/**
+ * @file Componente del panel de administración.
+ * @module components/admin-panel
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
 import { ApiTurnosService } from '../../services/apiTurnos';
 import { Turno } from '../models/turnosmodel';
 
+/**
+ * @class AdminPanel
+ * @description Componente para la gestión administrativa de turnos (crear, confirmar, cancelar, publicar).
+ * @component
+ * @selector app-admin-panel
+ * @standalone true
+ */
 @Component({
   selector: 'app-admin-panel',
   standalone: true,
@@ -14,28 +25,51 @@ import { Turno } from '../models/turnosmodel';
 })
 export class AdminPanel implements OnInit {
 
-  turnos: Turno[] = [];          // turnos desde backend
+  /**
+   * @property {Turno[]} turnos - Lista de todos los turnos del sistema.
+   */
+  turnos: Turno[] = [];
+
+  /**
+   * @property {boolean} cargando - Indica si se están cargando los datos.
+   */
   cargando = true;
+
+  /**
+   * @property {string} error - Mensaje de error para mostrar en la interfaz.
+   */
   error = '';
 
-  // Para crear nuevos turnos
+  /**
+   * @property {object} nuevoTurno - Objeto temporal para la creación de un nuevo turno.
+   */
   nuevoTurno: any = {
     fecha: '',
     hora: '',
     servicio: ''
   };
 
-  constructor(private turnoService: ApiTurnosService) {}
+  /**
+   * @constructor
+   * @param {ApiTurnosService} turnoService - Servicio para la gestión de turnos.
+   */
+  constructor(private turnoService: ApiTurnosService) { }
 
-  ngOnInit() {
+  /**
+   * @method ngOnInit
+   * @description Inicializa el componente cargando la lista de turnos.
+   * @returns {void}
+   */
+  ngOnInit(): void {
     this.cargarTurnosAdmin();
   }
 
-  /** ===============================
-   *  Cargar todos los turnos (ADMIN)
-   *  ===============================  
+  /**
+   * @method cargarTurnosAdmin
+   * @description Obtiene todos los turnos registrados en el sistema.
+   * @returns {void}
    */
-  cargarTurnosAdmin() {
+  cargarTurnosAdmin(): void {
     this.cargando = true;
     this.turnoService.getTurnosAdmin().subscribe({
       next: (data) => {
@@ -50,11 +84,13 @@ export class AdminPanel implements OnInit {
     });
   }
 
-  /** ===============================
-   *  Confirmar turno (PUT)
-   *  ===============================  
+  /**
+   * @method confirmar
+   * @description Cambia el estado de un turno a 'Confirmado'.
+   * @param {Turno} turno - El turno a confirmar.
+   * @returns {void}
    */
-  confirmar(turno: Turno) {
+  confirmar(turno: Turno): void {
     this.turnoService.confirmarTurno(turno.id).subscribe({
       next: () => {
         turno.estado = "Confirmado";
@@ -65,11 +101,13 @@ export class AdminPanel implements OnInit {
     });
   }
 
-  /** ===============================
-   *  Cancelar turno (PUT)
-   *  ===============================  
+  /**
+   * @method cancelar
+   * @description Cambia el estado de un turno a 'Cancelado'.
+   * @param {Turno} turno - El turno a cancelar.
+   * @returns {void}
    */
-  cancelar(turno: Turno) {
+  cancelar(turno: Turno): void {
     this.turnoService.cancelarTurno(turno.id).subscribe({
       next: () => {
         turno.estado = "Cancelado";
@@ -80,11 +118,29 @@ export class AdminPanel implements OnInit {
     });
   }
 
-  /** ===============================
-   *  Crear nuevo turno (POST)
-   *  ===============================  
+  /**
+   * @method publicar
+   * @description Cambia el estado de un turno a 'Disponible' para que sea visible por los clientes.
+   * @param {Turno} turno - El turno a publicar.
+   * @returns {void}
    */
-  crearTurno() {
+  publicar(turno: Turno): void {
+    this.turnoService.publicarTurno(turno.id).subscribe({
+      next: () => {
+        turno.estado = "Disponible";
+      },
+      error: () => {
+        alert('No se pudo publicar el turno.');
+      }
+    });
+  }
+
+  /**
+   * @method crearTurno
+   * @description Crea un nuevo turno en el sistema con los datos del formulario.
+   * @returns {void}
+   */
+  crearTurno(): void {
     this.turnoService.crearTurno(this.nuevoTurno).subscribe({
       next: (t) => {
         this.turnos.push(t);
