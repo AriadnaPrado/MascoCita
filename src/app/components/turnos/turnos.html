@@ -1,75 +1,66 @@
 <div class="container">
 
- 
-
-  <!-- Mis turnos -->
   <h2 class="titulo">Mis Turnos</h2>
 
-  <table class="tabla">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Hora</th>
-        <th>Servicio</th>
-        <th>Estado</th>
-      </tr>
-    </thead>
+  <div class="lista-turnos">
+    <div class="turnos-encabezado">
+      <div class="encabezado-item">Fecha</div>
+      <div class="encabezado-item">Hora</div>
+      <div class="encabezado-item">Servicio</div>
+      <div class="encabezado-item">Estado</div>
+    </div>
 
-    <tbody>
-      <tr *ngFor="let t of turnosDelCliente">
-        <td>{{ t.fecha }}</td>
-        <td>{{ t.hora }}</td>
-        <td>{{ t.servicio }}</td>
-        <td>
+    <div class="turnos-cuerpo">
+      <div class="turno-card" *ngFor="let t of turnosDelCliente">
+        <div class="turno-detalle" data-label="Fecha">{{ t.fecha }}</div>
+        <div class="turno-detalle" data-label="Hora">{{ t.hora }}</div>
+        <div class="turno-detalle" data-label="Servicio">{{ t.servicio }}</div>
+        <div class="turno-detalle" data-label="Estado">
           <span [class]="'estado ' + t.estado.toLowerCase()">{{ t.estado }}</span>
-        </td>
-      </tr>
+        </div>
+      </div>
 
-      <tr *ngIf="turnosDelCliente.length === 0">
-        <td colspan="4" class="text-center">Aún no tenés turnos reservados.</td>
-      </tr>
-    </tbody>
-  </table>
-
-   <!-- Botón para mostrar/ocultar turnos disponibles -->
+      <div class="turno-vacio" *ngIf="turnosDelCliente.length === 0">
+        <div class="text-center">Aún no tenés turnos reservados.</div>
+      </div>
+    </div>
+  </div>
   <button class="btn-mostrar" (click)="toggleDisponibles()">
     {{ mostrarDisponibles ? 'Ocultar turnos disponibles' : 'Reservar turno' }}
   </button>
 
-  <!-- Turnos disponibles (solo si mostrarDisponibles = true) -->
   <div *ngIf="mostrarDisponibles">
     <h2 class="titulo">Turnos Disponibles</h2>
 
-    <table class="tabla">
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th>Hora</th>
-          <th>Servicio</th>
-          <th>Estado</th>
-          <th>Acción</th>
-        </tr>
-      </thead>
+    <div class="lista-turnos">
+      <div class="turnos-encabezado">
+        <div class="encabezado-item">Fecha</div>
+        <div class="encabezado-item">Hora</div>
+        <div class="encabezado-item">Servicio</div>
+        <div class="encabezado-item">Estado</div>
+        <div class="encabezado-item">Acción</div>
+      </div>
 
-      <tbody>
-        <tr *ngFor="let t of turnosDisponibles">
-          <td>{{ t.fecha }}</td>
-          <td>{{ t.hora }}</td>
-          <td>{{ t.servicio }}</td>
-          <td><span class="estado disponible">{{ t.estado }}</span></td>
-          <td>
+      <div class="turnos-cuerpo">
+        <div class="turno-card" *ngFor="let t of turnosDisponibles">
+          <div class="turno-detalle" data-label="Fecha">{{ t.fecha }}</div>
+          <div class="turno-detalle" data-label="Hora">{{ t.hora }}</div>
+          <div class="turno-detalle" data-label="Servicio">{{ t.servicio }}</div>
+          <div class="turno-detalle" data-label="Estado">
+            <span class="estado disponible">{{ t.estado }}</span>
+          </div>
+          <div class="turno-detalle accion" data-label="Acción">
             <button class="btn-reservar" (click)="reservar(t)">
               Reservar
             </button>
-          </td>
-        </tr>
+          </div>
+        </div>
 
-        <tr *ngIf="turnosDisponibles.length === 0">
-          <td colspan="5" class="text-center">No hay turnos disponibles.</td>
-        </tr>
-      </tbody>
-    </table>
-
+        <div class="turno-vacio" *ngIf="turnosDisponibles.length === 0">
+          <div class="text-center">No hay turnos disponibles.</div>
+        </div>
+      </div>
+    </div>
     <hr />
   </div>
 

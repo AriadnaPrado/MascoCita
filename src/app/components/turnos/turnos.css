@@ -1,129 +1,549 @@
-/* ===== Container general ===== */
 .container {
+
   max-width: 800px;
+
   margin: 40px auto;
+
   padding: 25px;
+
   padding-top: 10px;
+
   background: linear-gradient(180deg, #ffffff 0%, #f8fcff 100%);
+
   border-radius: 16px;
+
   box-shadow: 0 8px 24px rgba(0, 191, 255, 0.15);
+
   font-family: "Bricolage Grotesque", sans-serif;
+
 }
 
+
+
 /* ===== Título ===== */
+
 h2 {
+
   font-size: 40px;
-  
+
   color: #ff8c00;
+
   text-align: center;
+
   margin-bottom: 30px;
+
   text-shadow: 0 2px 6px rgba(255, 165, 0, 0.3);
+
   font-family: "Pacifico", sans-serif;
 
 }
 
-/* ===== Formulario de reserva ===== */
+
+
+/* ===== Formulario de reserva (Mantenido) ===== */
+
 .form-turno {
+
   display: flex;
+
   justify-content: center;
+
   gap: 15px;
+
   flex-wrap: wrap;
+
   background: #e6f7ff;
+
   border: 2px solid #00bfff;
+
   border-radius: 12px;
+
   padding: 25px;
+
   margin-bottom: 35px;
+
   box-shadow: 0 4px 12px rgba(0, 191, 255, 0.15);
+
 }
+
+
 
 input {
+
   padding: 12px 14px;
+
   border: 1px solid #ccc;
+
   border-radius: 8px;
+
   font-size: 15px;
+
   width: 190px;
+
   transition: all 0.3s ease;
+
 }
+
+
 
 input:focus {
+
   border-color: #00bfff;
+
   box-shadow: 0 0 8px rgba(0, 191, 255, 0.3);
+
   outline: none;
+
 }
 
-/* ===== Botón ===== */
+
+
+/* ===== Botones (Estilos generales) ===== */
+
 button {
-   display: block;
+
+  display: block;
+
   margin: 0 auto 25px; 
+
   background-color: #ffa500;
+
   color: #fff;
+
   border: none;
+
   padding: 12px 20px;
+
   border-radius: 8px;
+
   font-size: 15px;
+
   font-weight: 600;
+
   cursor: pointer;
+
   transition: all 0.25s ease;
-  
+
 }
+
+
 
 button:hover {
+
   background-color: #ff7b00;
+
   box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+
   transform: translateY(-2px);
+
   justify-content: center;
+
 }
 
-/* ===== Tabla de turnos ===== */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0, 191, 255, 0.1);
-  margin-bottom: 20px;
+
+
+/* Estilo específico para el botón principal de mostrar/ocultar */
+
+.btn-mostrar {
+
+    margin: 20px auto 25px;
+
 }
 
-th {
-  text-align: center;
-  padding: 16px;
-  background: #00bfff;
-  color: #fff;
-  font-size: 16px;
-  letter-spacing: 0.5px;
+
+
+/* ===== Listas de Turnos (Reemplazo de Tabla con CSS Grid) ===== */
+
+
+
+.lista-turnos {
+
+    /* Mantiene el sombreado y el radio de la tabla */
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow: 0 4px 14px rgba(0, 191, 255, 0.1);
+
+    margin-bottom: 20px;
+
 }
 
-td {
-  text-align: center;
-  padding: 14px;
-  background: #ffffff;
-  border-bottom: 1px solid #eee;
-  font-size: 15px;
-  color: #333;
-  transition: background 0.3s ease;
+
+
+/* Encabezado (Simula thead/th) */
+
+.turnos-encabezado {
+
+    display: grid;
+
+    /* Define la estructura de las columnas: Fecha, Hora, Servicio, Estado, Acción */
+
+    grid-template-columns: 1fr 0.8fr 1.5fr 1fr 1fr;
+
+    background: #00bfff;
+
+    color: #fff;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.5px;
+
+    padding: 16px 10px;
+
 }
 
-tr:hover td {
-  background: #fff7ef;
+
+
+.encabezado-item {
+
+    text-align: center;
+
 }
+
+
+
+/* Filas de Turnos (Simula tr/td) */
+
+.turnos-cuerpo {
+
+    background: #ffffff;
+
+}
+
+
+
+.turno-card {
+
+    display: grid;
+
+    grid-template-columns: 1fr 0.8fr 1.5fr 1fr 1fr; /* Mismo layout que el encabezado */
+
+    align-items: center;
+
+    padding: 12px 10px;
+
+    border-bottom: 1px solid #eee;
+
+    font-size: 15px;
+
+    color: #333;
+
+    transition: background 0.3s ease;
+
+}
+
+
+
+.turno-card:last-child {
+
+    border-bottom: none;
+
+}
+
+
+
+.turno-card:hover {
+
+    background: #fff7ef; /* Mantiene el hover de la fila */
+
+}
+
+
+
+.turno-detalle {
+
+    text-align: center;
+
+    /* Oculta la etiqueta data-label en escritorio */
+
+    &::before {
+
+        display: none;
+
+    }
+
+}
+
+
+
+/* Estilo para los botones de la lista de disponibles */
+
+.btn-reservar {
+
+    display: inline-block; /* Sobrescribe el display: block del estilo genérico */
+
+    padding: 6px 12px;
+
+    font-size: 14px;
+
+    margin: 0; /* Elimina el margen automático */
+
+}
+
+
+
+/* Contenido vacío */
+
+.turno-vacio {
+
+    padding: 20px;
+
+    text-align: center;
+
+    color: #666;
+
+    font-style: italic;
+
+    background: #fcfcfc;
+
+    border-bottom-left-radius: 10px;
+
+    border-bottom-right-radius: 10px;
+
+}
+
+
 
 /* ===== Estados ===== */
-.confirmado { color: #28a745; font-weight: 600; }
-.pendiente  { color: #ffa500; font-weight: 600; }
-.cancelado  { color: #dc3545; font-weight: 600; }
 
-/* ===== Responsive ===== */
-@media (max-width: 600px) {
-  .form-turno {
-    flex-direction: column;
-    align-items: stretch;
+.estado {
+
+    padding: 4px 8px;
+
+    border-radius: 4px;
+
+    font-size: 0.9em;
+
+    display: inline-block;
+
+}
+
+.confirmado { color: #28a745; font-weight: 600; background-color: #e6ffe6;}
+
+.pendiente  { color: #ffa500; font-weight: 600; background-color: #fff8e1;}
+
+.cancelado  { color: #dc3545; font-weight: 600; background-color: #ffe8e8;}
+
+.disponible { color: #00bfff; font-weight: 600; background-color: #e0f7ff;} /* Nuevo estado */
+
+
+
+
+
+/* -------------------------------------------
+
+        RESPONSIVE / ADAPTIVE DESIGN RULES
+
+    ------------------------------------------- */
+
+
+
+/* Adaptación general para pantallas más pequeñas que 850px */
+
+@media (max-width: 850px) {
+
+  .container {
+
+    /* Reducir el margen vertical y añadir un pequeño margen horizontal */
+
+    margin: 20px 10px; 
+
+    /* Reducir el padding interno */
+
+    padding: 15px; 
+
   }
+
+}
+
+
+
+/* Adaptación para dispositivos móviles (teléfonos) */
+
+@media (max-width: 600px) {
+
+  
+
+  /* Ajuste del contenedor en el breakpoint más pequeño */
+
+  .container {
+
+    margin: 10px;
+
+    padding: 10px;
+
+  }
+
+  
+
+  /* Ajuste del tamaño del título */
+
+  h2 {
+
+    font-size: 32px; 
+
+    margin-bottom: 20px;
+
+  }
+
+  
+
+  /* Reglas originales para el formulario */
+
+  .form-turno {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    padding: 15px; /* Reducir padding del formulario */
+
+  }
+
+
+
+  /* Reglas originales para inputs y botones */
 
   input, button {
+
     width: 100%;
+
+    margin-bottom: 10px; /* Añadir espacio vertical entre elementos del formulario */
+
   }
 
-  table {
-    font-size: 14px;
+
+
+  /* --- Estilos para la visualización en formato tarjeta (Card View) --- */
+
+
+
+  .turnos-encabezado {
+
+      /* Oculta el encabezado de la "tabla" en móvil */
+
+      display: none;
+
   }
+
+
+
+  .turno-card {
+
+      /* Convierte la fila en una tarjeta (stacking the cells) */
+
+      grid-template-columns: 1fr; /* Una sola columna para apilar */
+
+      border: 1px solid #eee;
+
+      margin-bottom: 12px;
+
+      padding: 15px;
+
+      border-radius: 8px;
+
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+      /* Eliminar la línea divisoria inferior de la fila principal y el hover */
+
+      border-bottom: none;
+
+      background: #ffffff;
+
+  }
+
+
+
+  .turno-card:hover {
+
+      background: #ffffff; /* Evita el efecto hover en la tarjeta */
+
+  }
+
+
+
+  .turno-detalle {
+
+      /* Asegura que cada detalle ocupe todo el ancho */
+
+      text-align: left;
+
+      padding: 8px 0;
+
+      display: flex; /* Para alinear la etiqueta y el valor */
+
+      justify-content: space-between; /* Etiqueta a la izquierda, valor a la derecha */
+
+      font-size: 15px;
+
+      /* Línea divisoria entre detalles de la tarjeta */
+
+      border-bottom: 1px dotted #f0f0f0; 
+
+  }
+
+
+
+  .turno-detalle:last-child {
+
+      border-bottom: none;
+
+  }
+
+  
+
+  .turno-detalle::before {
+
+      /* Muestra la etiqueta data-label */
+
+      content: attr(data-label);
+
+      font-weight: 700;
+
+      color: #00bfff;
+
+      min-width: 90px;
+
+      margin-right: 10px;
+
+      text-align: left;
+
+  }
+
+  
+
+  .turno-detalle .estado {
+
+      /* Asegura que el estado se vea correctamente */
+
+      font-weight: 700;
+
+  }
+
+
+
+  .turno-detalle.accion {
+
+      /* Centra el botón de acción */
+
+      justify-content: center;
+
+      margin-top: 10px;
+
+      border-bottom: none;
+
+  }
+
+
+
+  .btn-reservar {
+
+      width: 100%; /* El botón de reservar ocupa todo el ancho de la tarjeta */
+
+  }
+
 }
