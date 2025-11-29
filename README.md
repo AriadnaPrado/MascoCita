@@ -1,59 +1,51 @@
-# TurnosCloud
+# MascoCita
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.7.
+Sistema de gestión de turnos para clínica veterinaria.
 
-## Development server
+## Inicio Rápido
 
-To start a local development server, run:
+Sigue estos pasos para levantar el proyecto en tu entorno local. Recomendamos utilizar **PowerShell** como terminal.
 
-```bash
-ng serve
-```
+### Prerrequisitos
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Node.js (v18 o superior recomendado)
+- Angular CLI (`npm install -g @angular/cli`)
+- Base de datos MariaDB/MySQL (o acceso a RDS)
 
-## Code scaffolding
+### 1. Backend
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+El backend es una aplicación Node.js/Express.
 
-```bash
-ng generate component component-name
-```
+1.  Abre **PowerShell** y navega a la carpeta del backend:
+    ```powershell
+    cd backend
+    ```
+2.  Instala las dependencias (si aún no lo has hecho):
+    ```powershell
+    npm install
+    ```
+3.  Inicia el servidor ejecutando el archivo principal:
+    ```powershell
+    node index.js
+    ```
+    El servidor correrá por defecto en el puerto configurado (ej. 3000 o 8080).
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 2. Frontend
 
-```bash
-ng generate --help
-```
+El frontend es una aplicación Angular.
 
-## Building
+1.  Abre una nueva pestaña de **PowerShell** en la raíz del proyecto:
+    ```powershell
+    # Si estás en la carpeta backend, sube un nivel:
+    cd ..
+    ```
+2.  Instala las dependencias (si aún no lo has hecho):
+    ```powershell
+    npm install
+    ```
+3.  Inicia el servidor de desarrollo:
+    ```powershell
+    ng serve
+    ```
+4.  Abre tu navegador en `http://localhost:4200/`.
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
